@@ -96,7 +96,9 @@ and grades only. Domain admins can add/remove/re-run analysis.
 
 #### Requirements
 
-* 
+* Developer users have read only access to domain repositories.
+* Developer users can be authorized to access domains by Domain Admins.
+* Domain Admins can elevate Developer users to Domain Admin
 
 ### Manage Repositories
 
