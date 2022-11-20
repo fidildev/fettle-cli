@@ -57,6 +57,7 @@ Admin or Domain Admin. Can re-run analysis on Repositories in Domains they have 
 
 * Developer
 * Domain Admin
+* Organization Admin
 
 #### Description
 
@@ -78,69 +79,44 @@ Provides a toolset that can be run against a GitHub repository to provide a grad
 * Each check has a weight of 1 and a grade is determined by dividing successful checks by the total number of checks.
   * Example: Given 8 checks, a repository with 4 passing checks, the repository would receive a grade of 50% `4/8=.5`.
 * Missing checks are provided are marked as recommended changes.
+* Grades can be reviewed by any authorized user in an Organization.
 
-### Signup/In with GitHub
+### Registration with GitHub
 
 #### Personas
 
 * Developer
 * Domain Admin
+* Organization Admin
 
 #### Description
 
-The default signup/in shall be with GitHub SSO. 
+The default signup/in shall be with GitHub SSO.
 
 #### Requirements
 
 * New users are registered as Developer users
-* New users are presented with a default home screen that includes:
-  * Description of what fettle does
-  * Option to add a repository for analysis
-  * Option to add a domain
 * Users registering must authorize access to repositories and repository settings.
 
-### Domain User Management
+
+### Organization Management
 
 #### Personas
 
-* Domain Admin
+* Organization Admin
 
 #### Description
 
-Domain Admins can add/remove authorized users to a domain. By default users added to a domain are Developer users. 
-Domain Admins may choose to elevate privileges to Domain Admin. Developer users have permission to view repositories 
-and grades only. Domain admins can add/remove/re-run analysis.
+Organization Admins can manage Users, Domains, and Repositories. Domain Admins can manage Repositories within a Domain.
 
 #### Requirements
 
-* Developer users have read only access to domain repositories.
-* Developer users can be authorized to access domains by Domain Admins.
-* Domain Admins can elevate Developer users to Domain Admin
-
-### Manage Repositories
-
-#### Personas
-
-* Developer
-* Domain Admin
-
-#### Description
-
-Users have the ability to review grades for their repository, re-run an analysis, and add/remove domains.
-
-#### Requirements
-
-* Developer users can add/remove repositories they own.
-* Domain Admin users can add/remove repositories from domains they own.
-  * Domain Admin can add repositories they are authorized for in GitHub.
-* All personas can view current state of repositories. 
-    * List of existing repositories and their grades
-    * Repositories are grouped by domain if a domain exists.
-* Domain Admin users can add/remove repositories from a domain.
-* All repositories have an option to re-run the grading analysis.
-  * Domain Admin can do this for all repositories in a domain.
-  * Domain Admin can do this for individual repositories in a domain.
-
+* New Users (not invited) are presented with a screen to create an Organization.
+* Organization Admins can invite new users with an email address (or GitHub username?)
+* Invited Users have read access to Repositories and Domains within the Organization.
+* Organization Admins can elevate Developer Users to Domain Admin or Organization Admin.
+* Organization Admins can create/remove Repositories and Domains.
+* Domain Admins can create/remove Repositories within a Domain.
 
 
 
