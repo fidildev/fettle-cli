@@ -32,6 +32,23 @@ and standards.
 * Running out of financial runway. Costing money without making any money.
 * Tool doesn't provide the value we think it will.
 
+## Personas
+
+### Organization Admin
+
+Owner of an Organization. Has full permissions to manage users, Repositories, and Domains within the Organization.
+
+### Domain Admin
+
+Manages one or more Domains. Only Organization admins can grant Domain Admin privileges. Domain admins can 
+add/remove Repositories from Domains they have permissions for. Can re-run analysis on entire Domain or individual 
+Repositories. Can add Developer users to domains but cannot add users to Organization.
+
+### Developer
+
+Has read only access to Organization Repositories and Domains they have been granted access from by an Organization 
+Admin or Domain Admin. Can re-run analysis on Repositories in Domains they have been granted access to.
+
 ## Solution
 
 ### Software Fitness Report Card
