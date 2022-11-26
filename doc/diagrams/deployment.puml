@@ -1,10 +1,47 @@
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
 
-Deployment_Node(gcp, "Google Cloud", "IaaS") {
-    Deployment_Node(prod, "K8s Cluster", "Production")
-    Deployment_Node(test, "K8s Cluster", "Production")
-    Deployment_Node(dev, "K8s Cluster", "Production")
+SHOW_LEGEND()
+
+Node(gcp, "Google Cloud", "Terraform") {
+    Node(k8s, "K8s Cluster", "Terraform") {
+      Container(eventBroker, "EventBroker", "RabbitMQ")
+      Container(gateway, "API Gateway", "GCP Gateway")
+      Deployment_Node(deployment, "Deployment", "Helm") {
+        Container(service, "Service", "Spring Boot/Vue")
+        Container(eventStore, "EventStore", "Axon Server")
+        Container(readModel, "ReadModelStore", "MongoDB")
+      }
+    }
 }
 
+Node(codacy, "Codacy", "???") {
+    Container(static, "Static Code Analysis", detekt)
+    Container(coverage, "Test Coverage", jacoco)
+}
+
+Node(grafana, "Grafana Cloud", "Terraform") {
+  Node(dashboard, "Dashboard",) {
+    Container(logs, "Logs",)
+    Container(trace, "Tracing",)
+    Container(metrics, "Metrics",)
+    Container(monitors, "Monitors",)
+  }
+}
+
+Node(gh, "GitHub", "") {
+    Container(pipelines, "Deployment \nPipeline", "Actions")
+    Container(dependabot, "Dependabot", "SAST")
+    ContainerDb(repos, "Source \nRepository", "Git")
+}
+
+Rel(gateway, service,)
+Rel(service, eventBroker,)
+Rel(service, eventStore,)
+Rel(service, readModel,)
+Rel(repos, pipelines,)
+Rel(dependabot, repos,)
+Rel(pipelines, codacy,)
+Rel(pipelines, deployment,)
+Rel(k8s, grafana,)
 @enduml
