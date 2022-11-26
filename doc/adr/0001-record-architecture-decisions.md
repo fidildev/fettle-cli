@@ -12,8 +12,11 @@ We need to record the architectural decisions made on this project.
 
 ## Decision
 
-We will use Architecture Decision Records, as [described by Michael Nygard](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions).
+We will use Architecture Decision Records, as [described by Michael Nygard](http://thinkrelevance.
+com/blog/2011/11/15/documenting-architecture-decisions). 
+
+These ADRs will be managed using [adr-tools](https://github.com/npryce/adr-tools).
 
 ## Consequences
 
-See Michael Nygard's article, linked above. For a lightweight ADR toolset, see Nat Pryce's [adr-tools](https://github.com/npryce/adr-tools).
+ADRs will allow us to know the history of our decisions, and adr-tools will allow us to manage our ADRs easily.
