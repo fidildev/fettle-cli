@@ -11,3 +11,7 @@
 ## Observability
 
 ## Security
+
+## ADR
+
+[ADRs](./adr) are managed with `adr-tools` and stored in `doc/adr`.
