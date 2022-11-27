@@ -1,3 +1,4 @@
 # fettle
 
-The thing that shall be
+## [Product Requirements](./doc/prd.md)
+## [Architecture](./doc/architecture.md)
