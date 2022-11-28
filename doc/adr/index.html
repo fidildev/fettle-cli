@@ -10,7 +10,8 @@
           if (file.name === 'index.html') {
             continue;
           }
-          htmlString += `<li><a href="${file.name}">${file.name}</a></li>`;
+          let htmlPath = 'https://fidildev.github.io/fettle/doc/adr/' + file.name.replace('.md','.html');
+          htmlString += `<li><a href="${htmlPath}">${file.name}</a></li>`;
         }
 
         htmlString += '</ul>';
