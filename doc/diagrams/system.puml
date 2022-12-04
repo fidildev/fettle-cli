@@ -1,0 +1,41 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+
+SHOW_LEGEND()
+
+Node(fettle, "Fettle", "System") {
+    Node(sm, "Subscription Management", "Context") {
+        Container(subscription, "Subscription", "Service")
+        Container(payment, "Payment", "Service")
+        Container(messaging, "Messaging", "Service")
+    }
+    Node(om, "Organization Management", "Context") {
+        Container(organization, "Organization", "Service")
+        Container(user, "User", "Service")
+        Container(domain, "Domain", "Service")
+        Container(repository, "Repository", "Service")
+    }
+    Node(rm, "Repository Analysis", "Context") {
+        Container(grade, "Grade", "Service")
+        Container(ff, "Fettle Function", "Service")
+        Container(recommendation, "Recommendation", "Service")
+    }
+}
+
+Rel(subscription, payment,)
+Rel(organization, subscription,)
+Rel(organization, messaging,)
+Rel(organization, user,)
+Rel(organization, domain,)
+Rel(domain, repository,)
+Rel(domain, grade,)
+Rel(repository, grade,)
+Rel(domain, recommendation,)
+Rel(repository, recommendation,)
+Rel(domain, ff,)
+Rel(repository, ff,)
+Rel(messaging, subscription,)
+Rel(messaging, user,)
+
+@enduml
