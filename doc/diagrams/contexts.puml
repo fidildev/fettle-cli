@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+System(analysis, "Repository Analysis", "The components that make up the grade provided.")
+System(subscription, "Subscription Management", "Users can manage paid subscriptions, make payments, etc.")
+System(organization, "Organization Management", "Where organizations and repositories can be managed, their current grades viewed, etc.")
+System(communication, "Communications", "Newsletters, invoices, support, and other user communications")
+System_Ext(auth, "Auth0", "IdP used to manage fettle users, and their GitHub tokens")
+System_Ext(messaging, "Twilio", "Templates and messaging capabilities (email)")
+System_Ext(payment, "Stripe", "Payment processor for managing payments for paid subscriptions")
+System_Ext(github, "GitHub", "Source repositories for analysis")
+
+Rel(organization, subscription, up)
+Rel_L(subscription, communication, down)
+Rel(subscription, payment, up)
+Rel_U(organization, auth, up)
+Rel_L(organization, analysis, up)
+Rel_R(organization, github, up)
+
+Rel(communication, messaging, up)
+
+Rel(analysis, communication, down)
+Rel_L(analysis, github, up)
+Rel_R(github, auth, down)
+
+@enduml
