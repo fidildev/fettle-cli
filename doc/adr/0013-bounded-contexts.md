@@ -12,12 +12,17 @@ We use domain driven design (DDD) to help organize the application. The applicat
 
 ## Decision
 
-There are three bounded contexts:
+There are four bounded contexts:
 
 1. Organization Management
 1. Repository Analysis
 1. Subscription Management
+1. Communications
+
+![contexts](../diagrams/contexts.png)
 
 ## Consequences
 
 Services will be developed within the Bounded Contexts and will speak a ubiquitous language.
+
+Contexts will be scoped to specific capabilities to be orchestrated.
