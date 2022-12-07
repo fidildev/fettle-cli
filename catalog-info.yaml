@@ -3,5 +3,9 @@ kind: Domain
 metadata:
   name: fettle
   description: The fettle fitness app
+  annotations:
+    github.com/project-slug: 'fidildev/fettle'
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/adr-location: doc/adr
 spec:
-  owner: fidildev/dream-team
+  owner: dream-team
