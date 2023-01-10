@@ -1,0 +1,7 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+github:
+  token: ${GH_TOKEN}
+  user: ${GH_USER:fidil}
