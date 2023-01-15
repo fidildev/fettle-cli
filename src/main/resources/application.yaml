@@ -1,4 +1,11 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://fettle.us.auth0.com/
+---
+spring:
   config:
     activate:
       on-profile: local
