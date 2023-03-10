@@ -1,11 +1,16 @@
+@file:OptIn(ExperimentalCli::class)
+
 package dev.fidil.fettle
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import kotlinx.cli.ArgParser
+import kotlinx.cli.ExperimentalCli
 
-@SpringBootApplication
-class FettleApplication
 
 fun main(args: Array<String>) {
-    runApplication<FettleApplication>(*args)
+    val parser = ArgParser("fettle-cli")
+    parser.subcommands(BranchProtectionCommand())
+    parser.parse(args)
+
 }
+
+

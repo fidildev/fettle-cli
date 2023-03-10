@@ -1,15 +1,12 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    id("org.springframework.boot") version "3.0.1"
-    id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.spring") version "1.7.22"
+    kotlin("jvm") version "1.8.10"
+    application
 }
 
+description = "Fettle Cli"
 group = "dev.fidil"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+//java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -17,21 +14,47 @@ repositories {
 
 dependencies {
     implementation("org.kohsuke:github-api:1.313")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3.5")
+    // Use the Kotlin test library.
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    // Use the Kotlin JUnit integration.
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+application {
+    mainClass.set("dev.fidil.fettle.FettleApplicationKt")
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
+    }
+
+    jar {
+        manifest {
+            attributes["Implementation-Title"] = project.description
+            attributes["Implementation-Version"] = project.version
+        }
+    }
+
+    withType<Tar> {
+        archiveExtension.set("tar.gz")
+        compression = Compression.GZIP
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
+
+//tasks.withType<KotlinCompile> {
+//    kotlinOptions {
+//        freeCompilerArgs = listOf("-Xjsr305=strict")
+//        jvmTarget = "17"
+//    }
+//}
+//
+//tasks.withType<Test> {
+//    useJUnitPlatform()
+//}
