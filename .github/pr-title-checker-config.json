@@ -1,0 +1,14 @@
+{
+    "LABEL": {
+      "name": "Invalid PR Title",
+      "color": "EEEEEE"
+    },
+    "CHECKS": {
+      "prefixes": ["feat: ", "fix: ", "deps: ", "docs: ", "chore: ", "breaking change: "]
+    },
+    "MESSAGES": {
+      "success": "All OK",
+      "failure": "Failing CI test",
+      "notice": ""
+    }
+  }
