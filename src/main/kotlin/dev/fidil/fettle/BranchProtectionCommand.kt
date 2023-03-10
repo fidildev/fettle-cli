@@ -6,6 +6,8 @@ import kotlinx.cli.*
 import org.kohsuke.github.GitHubBuilder
 
 class BranchProtectionCommand : Subcommand("branchProtection", "Validate Branch protection is enabled") {
+    private val ghToken = System.getenv("GH_TOKEN")
+    private val ghUser = System.getenv("GH_USER")
     private val org by option(
         ArgType.String, "organization", "o", "The github organization"
     ).required()
@@ -15,16 +17,10 @@ class BranchProtectionCommand : Subcommand("branchProtection", "Validate Branch 
     private val branch by option(
         ArgType.String, "branch", "b", "The github branch to validate"
     ).default("main")
-    private val accessToken by option(
-        ArgType.String, "accessToken", "a", "Github access token"
-    ).required()
-    private val user by option(
-        ArgType.String, "user", "u", "Github user"
-    ).required()
 
     private var result: Boolean = false
     override fun execute() {
-        result = branchProtectionEnabled(org, repo, branch, accessToken, user)
+        result = branchProtectionEnabled(org, repo, branch, ghToken, ghUser)
         println("Branch Protection Enabled: $result")
     }
 
