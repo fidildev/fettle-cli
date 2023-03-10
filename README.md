@@ -23,5 +23,7 @@ cd build/fettle-0.0.1-SNAPSHOT/bin
 ```
 
 ```shell
-./fettle branchProtection -o fidildev -r fettle -a $GH_TOKEN -u {github_username}
+GH_TOKEN={github_token} /
+GH_USER={github_user} ?
+./fettle branchProtection -o fidildev -r fettle
 ```
