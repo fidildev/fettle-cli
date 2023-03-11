@@ -11,6 +11,8 @@ fun main(args: Array<String>) {
     parser.subcommands(BranchProtectionCommand())
     parser.parse(args)
 
+    println("╭ᥥ╮(´• ᴗ •`˵)╭ᥥ╮")
+
 }
 
 
