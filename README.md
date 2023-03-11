@@ -22,8 +22,16 @@ gunzip fettle-0.0.1-SNAPSHOT.zip
 cd build/fettle-0.0.1-SNAPSHOT/bin
 ```
 
+Branch Protection Enabled
 ```shell
 GH_TOKEN={github_token} /
 GH_USER={github_user} ?
 ./fettle branchProtection -o fidildev -r fettle
+```
+
+Dependabot Active
+```shell
+GH_TOKEN={github_token} /
+GH_USER={github_user} ?
+./fettle dependabot -o fidildev -r fettle
 ```
