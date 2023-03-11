@@ -15,11 +15,15 @@ Set the GitHub PAT in your environment as `GH_TOKEN`
 ```
 
 ```shell
-gunzip fettle-0.0.1-SNAPSHOT.zip
+cd build/distributions
 ```
 
 ```shell
-cd build/fettle-0.0.1-SNAPSHOT/bin
+unzip fettle-0.0.1-SNAPSHOT.zip
+```
+
+```shell
+cd fettle-0.0.1-SNAPSHOT/bin
 ```
 
 ```shell
