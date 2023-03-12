@@ -4,7 +4,6 @@ package dev.fidil.fettle
 
 import kotlinx.cli.*
 import org.kohsuke.github.GitHubBuilder
-import kotlin.system.exitProcess
 
 class BranchProtectionCommand(private val user:String, private val token:String) : Subcommand("branchProtection", "Validate Branch protection is enabled") {
 

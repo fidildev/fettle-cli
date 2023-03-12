@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     }
 
     val parser = ArgParser("fettle-cli")
-    parser.subcommands(BranchProtectionCommand(ghUser, ghToken))
+    parser.subcommands(BranchProtectionCommand(ghUser, ghToken), DependabotCommand(ghUser, ghToken))
     parser.parse(args)
 
     println("╭ᥥ╮(´• ᴗ •`˵)╭ᥥ╮")
