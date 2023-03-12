@@ -17,6 +17,7 @@ import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     createFettleConfigIfNotExists()
+    checkFettleConfigPermissions()
     val (ghUser, ghToken) = getGitHubConfig()
 
     val parser = ArgParser("fettle-cli")
@@ -26,44 +27,38 @@ fun main(args: Array<String>) {
     println("╭ᥥ╮(´• ᴗ •`˵)╭ᥥ╮")
 }
 fun createFettleConfigIfNotExists() {
-    val fettleDir = File(System.getProperty("user.home"), ".fettle")
-    val configFile = File(fettleDir, "config.yaml")
-    val requiredFilePermission = PosixFilePermissions.fromString("rw-------")
-
-    if (!fettleDir.exists()) {
-        if (fettleDir.mkdir()) {
+    if (!GitHubConfig.fettleDir.exists()) {
+        if (GitHubConfig.fettleDir.mkdir()) {
         } else {
             println("Failed to create the fettle config directory.")
             exitProcess(1)
         }
     }
-    if (!configFile.exists()) {
+    if (!GitHubConfig.configFile.exists()) {
         try {
-            configFile.createNewFile()
+            GitHubConfig.configFile.createNewFile()
             Files.setPosixFilePermissions(
-                configFile.toPath(),
-                requiredFilePermission
+                GitHubConfig.configFile.toPath(),
+                GitHubConfig.requiredFilePermission
             )
         } catch (ex: Exception) {
             println("Failed to create the fettle config file")
             exitProcess(1)
         }
     }
-    else {
-        val actualPermission = Files.getPosixFilePermissions(configFile.toPath())
-        if (actualPermission != requiredFilePermission) {
-            println("Fettle config has the wrong permission. Please set it to 600")
-            exitProcess(1)
-        }
+}
+
+fun checkFettleConfigPermissions() {
+    val actualPermission = Files.getPosixFilePermissions(GitHubConfig.configFile.toPath())
+    if (actualPermission != GitHubConfig.requiredFilePermission) {
+        println("Fettle config has the wrong permission. Please set it to 600 for security reasons.")
+        exitProcess(1)
     }
 }
 
 fun getGitHubConfig(): Pair<String, String> {
-    val fettleDir = File(System.getProperty("user.home"), ".fettle")
-    val configFile = File(fettleDir, "config.yaml")
-
     val yaml = Yaml()
-    val configData = yaml.loadAs(configFile.inputStream(), GitHubConfig::class.java)
+    val configData = yaml.loadAs(GitHubConfig.configFile.inputStream(), GitHubConfig::class.java)
 
     var ghUser: String? = null
     var ghToken: String? = null
