@@ -8,15 +8,13 @@ import dev.fidil.fettle.config.GitHubConfig
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ExperimentalCli
 import org.yaml.snakeyaml.Yaml
-import java.io.File
 import java.nio.file.Files
-import java.nio.file.attribute.PosixFilePermissions
 import java.util.*
 import kotlin.system.exitProcess
 
 
 fun main(args: Array<String>) {
-    createFettleConfigIfNotExists()
+    createFettleConfigDirIfNotExists()
     checkFettleConfigPermissions()
     val (ghUser, ghToken) = getGitHubConfig()
 
@@ -26,29 +24,19 @@ fun main(args: Array<String>) {
 
     println("╭ᥥ╮(´• ᴗ •`˵)╭ᥥ╮")
 }
-fun createFettleConfigIfNotExists() {
+fun createFettleConfigDirIfNotExists() {
     if (!GitHubConfig.fettleDir.exists()) {
         if (GitHubConfig.fettleDir.mkdir()) {
         } else {
-            println("Failed to create the fettle config directory.")
-            exitProcess(1)
-        }
-    }
-    if (!GitHubConfig.configFile.exists()) {
-        try {
-            GitHubConfig.configFile.createNewFile()
-            Files.setPosixFilePermissions(
-                GitHubConfig.configFile.toPath(),
-                GitHubConfig.requiredFilePermission
-            )
-        } catch (ex: Exception) {
-            println("Failed to create the fettle config file")
-            exitProcess(1)
+            println("Warning: Failed to create the fettle config directory.")
         }
     }
 }
 
 fun checkFettleConfigPermissions() {
+    if (!GitHubConfig.fettleDir.exists()) {
+        return
+    }
     val actualPermission = Files.getPosixFilePermissions(GitHubConfig.configFile.toPath())
     if (actualPermission != GitHubConfig.requiredFilePermission) {
         println("Fettle config has the wrong permission. Please set it to 600 for security reasons.")
@@ -57,18 +45,20 @@ fun checkFettleConfigPermissions() {
 }
 
 fun getGitHubConfig(): Pair<String, String> {
-    val yaml = Yaml()
-    val configData = yaml.loadAs(GitHubConfig.configFile.inputStream(), GitHubConfig::class.java)
-
     var ghUser: String? = null
     var ghToken: String? = null
 
-    if (configData != null) {
-        val githubConfig = configData.github
-        ghUser = githubConfig.user
-        ghToken = githubConfig.token
-    }
+    if (GitHubConfig.fettleDir.exists()) {
+        val yaml = Yaml()
+        val configData = yaml.loadAs(GitHubConfig.configFile.inputStream(), GitHubConfig::class.java)
 
+        if (configData != null) {
+            val githubConfig = configData.github
+            ghUser = githubConfig.user
+            ghToken = githubConfig.token
+        }
+    }
+    
     if (ghUser == null) {
         ghUser = System.getenv("GH_USER")
     }
