@@ -5,10 +5,7 @@ import kotlinx.cli.Subcommand
 import kotlinx.cli.required
 import org.kohsuke.github.GitHubBuilder
 
-class DependabotCommand : Subcommand("dependabot", "Validate dependabot is active") {
-
-    private val ghToken = System.getenv("GH_TOKEN")
-    private val ghUser = System.getenv("GH_USER")
+class DependabotCommand(private val user:String, private val token:String) : Subcommand("dependabot", "Validate dependabot is active") {
     private val org by option(
         ArgType.String, "organization", "o", "The github organization"
     ).required()
@@ -18,7 +15,7 @@ class DependabotCommand : Subcommand("dependabot", "Validate dependabot is activ
 
     private var result: Boolean = false
     override fun execute() {
-        result = dependabotActive(org, repo, ghToken, ghUser)
+        result = dependabotActive(org, repo, token, user)
         println("Dependabot Active: $result")
     }
 

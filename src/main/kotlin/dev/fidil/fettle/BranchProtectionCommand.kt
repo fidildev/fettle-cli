@@ -5,9 +5,8 @@ package dev.fidil.fettle
 import kotlinx.cli.*
 import org.kohsuke.github.GitHubBuilder
 
-class BranchProtectionCommand : Subcommand("branchProtection", "Validate Branch protection is enabled") {
-    private val ghToken = System.getenv("GH_TOKEN")
-    private val ghUser = System.getenv("GH_USER")
+class BranchProtectionCommand(private val user:String, private val token:String) : Subcommand("branchProtection", "Validate Branch protection is enabled") {
+
     private val org by option(
         ArgType.String, "organization", "o", "The github organization"
     ).required()
@@ -20,7 +19,7 @@ class BranchProtectionCommand : Subcommand("branchProtection", "Validate Branch 
 
     private var result: Boolean = false
     override fun execute() {
-        result = branchProtectionEnabled(org, repo, branch, ghToken, ghUser)
+        result = branchProtectionEnabled(org, repo, branch, token, user)
         println("Branch Protection Enabled: $result")
     }
 
