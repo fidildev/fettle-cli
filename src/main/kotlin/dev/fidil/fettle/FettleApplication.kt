@@ -34,7 +34,7 @@ fun createFettleConfigDirIfNotExists() {
 }
 
 fun checkFettleConfigPermissions() {
-    if (!GitHubConfig.fettleDir.exists()) {
+    if (!GitHubConfig.configFile.exists()) {
         return
     }
     val actualPermission = Files.getPosixFilePermissions(GitHubConfig.configFile.toPath())
@@ -48,7 +48,7 @@ fun getGitHubConfig(): Pair<String, String> {
     var ghUser: String? = null
     var ghToken: String? = null
 
-    if (GitHubConfig.fettleDir.exists()) {
+    if (GitHubConfig.configFile.exists()) {
         val yaml = Yaml()
         val configData = yaml.loadAs(GitHubConfig.configFile.inputStream(), GitHubConfig::class.java)
 
@@ -58,7 +58,7 @@ fun getGitHubConfig(): Pair<String, String> {
             ghToken = githubConfig.token
         }
     }
-    
+
     if (ghUser == null) {
         ghUser = System.getenv("GH_USER")
     }
