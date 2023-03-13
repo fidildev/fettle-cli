@@ -3,7 +3,7 @@ package dev.fidil.fettle.command
 import kotlinx.cli.*
 
 @OptIn(ExperimentalCli::class)
-abstract class GitHubRepoSubCommand(name: String, actionDescription: String) : Subcommand(name, actionDescription) {
+abstract class GitHubRepoSubCommand(name: String, actionDescription: String) : FettleCommand(name, actionDescription) {
     val org by option(
         ArgType.String, "organization", "o", "The github organization"
     ).required()

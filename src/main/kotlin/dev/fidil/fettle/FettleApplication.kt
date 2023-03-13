@@ -2,11 +2,13 @@
 
 package dev.fidil.fettle
 
-import dev.fidil.fettle.command.BranchProtectionCommand
-import dev.fidil.fettle.command.DependabotCommand
+import dev.fidil.fettle.CommandFactory.getImplementations
+import dev.fidil.fettle.command.CommandContext
+import dev.fidil.fettle.command.FettleCommand
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ExperimentalCli
 import org.reflections.Reflections
+import java.lang.reflect.Modifier
 import java.util.*
 import kotlin.system.exitProcess
 
@@ -16,11 +18,24 @@ object CommandFactory {
         val reflections = Reflections("dev.fidil.fettle")
         val subTypes = reflections.getSubTypesOf(T::class.java)
         for (subType in subTypes) {
+            if (Modifier.isAbstract(subType.modifiers)) {
+                continue
+            }
             classes.add(subType as Class<out T>)
         }
         return classes
     }
 }
+
+fun createCommandContext(user: String, token: String): CommandContext {
+    val context = CommandContext(user, token)
+    for (implementation in getImplementations<FettleCommand>()) {
+        context.commandMap[implementation.simpleName] =
+            implementation.getDeclaredConstructor(CommandContext::class.java).newInstance(context)
+    }
+    return context
+}
+
 fun main(args: Array<String>) {
     val ghToken = System.getenv("GH_TOKEN")
     val ghUser = System.getenv("GH_USER")
@@ -30,7 +45,8 @@ fun main(args: Array<String>) {
     }
 
     val parser = ArgParser("fettle-cli")
-    parser.subcommands(BranchProtectionCommand(ghUser, ghToken), DependabotCommand(ghUser, ghToken))
+    val context = createCommandContext(ghUser, ghToken)
+    parser.subcommands(*context.commandMap.values.toTypedArray())
     parser.parse(args)
     println("╭ᥥ╮(´• ᴗ •`˵)╭ᥥ╮")
 
