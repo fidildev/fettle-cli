@@ -1,0 +1,8 @@
+version:1
+updates:
+  -package-ecosystem: 'gradle'
+    directory: "/"
+    schedule:
+      interval:"weekly"
+    labels:
+      - "deps:"
