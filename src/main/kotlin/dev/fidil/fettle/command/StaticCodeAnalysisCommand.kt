@@ -17,7 +17,7 @@ class StaticCodeAnalysisCommand(private val user: String, private val token: Str
             val hooks = github.getRepository("$org/$repo").hooks
             if (hooks.isNotEmpty()) {
                 for (hook in hooks) {
-                    val hookUrl = hook.config.entries.find{ it.key.toString() == "url" }
+                    val hookUrl = hook.config.entries.find { it.key.toString() == "url" }
                     if (hookUrl?.value != null && hookUrl.value!!.contains("codacy")) {
                         return true
                     }
@@ -27,6 +27,5 @@ class StaticCodeAnalysisCommand(private val user: String, private val token: Str
         } catch (e: Exception) {
             false
         }
-
     }
 }
