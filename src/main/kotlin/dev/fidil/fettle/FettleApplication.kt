@@ -4,6 +4,7 @@ package dev.fidil.fettle
 
 import dev.fidil.fettle.command.BranchProtectionCommand
 import dev.fidil.fettle.command.DependabotCommand
+import dev.fidil.fettle.command.StaticCodeAnalysisCommand
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ExperimentalCli
 import java.util.*
@@ -19,7 +20,7 @@ fun main(args: Array<String>) {
     }
 
     val parser = ArgParser("fettle-cli")
-    parser.subcommands(BranchProtectionCommand(ghUser, ghToken), DependabotCommand(ghUser, ghToken))
+    parser.subcommands(BranchProtectionCommand(ghUser, ghToken), DependabotCommand(ghUser, ghToken), StaticCodeAnalysisCommand(ghUser, ghToken))
     parser.parse(args)
 
     println("╭ᥥ╮(´• ᴗ •`˵)╭ᥥ╮")
