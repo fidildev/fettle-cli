@@ -1,17 +1,11 @@
 package dev.fidil.fettle.command
 
-import org.kohsuke.github.GitHubBuilder
+import dev.fidil.fettle.handler.FettleHandler
 
-class DependabotCommand(override val context: CommandContext) :
+class DependabotCommand(override val handler: FettleHandler) :
     GitHubRepoSubCommand("dependabot", "Validate dependabot is active") {
 
-    override fun processCommand(context: CommandContext): CommandResult {
-        val github = GitHubBuilder().withOAuthToken(context.repoToken, context.repoUser).build()
-        return try {
-            github.getRepository("$org/$repo").getFileContent("/.github/dependabot.yml")
-            CommandResult.Passed("PASS")
-        } catch (e: Exception) {
-            CommandResult.Failed("FAIL")
-        }
+    override fun processCommand(): CommandResult {
+        return handler.dependabot(org, repo, branch)
     }
 }

@@ -1,6 +1,6 @@
 package dev.fidil.fettle.command
 
-data class CommandContext(
+data class FettleContext(
     val repoUser: String,
     val repoToken: String,
 ) {

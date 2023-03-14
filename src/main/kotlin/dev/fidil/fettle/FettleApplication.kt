@@ -3,8 +3,10 @@
 package dev.fidil.fettle
 
 import dev.fidil.fettle.CommandFactory.getImplementations
-import dev.fidil.fettle.command.CommandContext
 import dev.fidil.fettle.command.FettleCommand
+import dev.fidil.fettle.command.FettleContext
+import dev.fidil.fettle.handler.FettleHandler
+import dev.fidil.fettle.handler.GitHubFettleHandler
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ExperimentalCli
 import org.reflections.Reflections
@@ -27,12 +29,14 @@ object CommandFactory {
     }
 }
 
-fun createCommandContext(user: String, token: String): CommandContext {
-    val context = CommandContext(user, token)
+fun findFettleFunctions(user: String, token: String): FettleContext {
+    val context = FettleContext(user, token)
+    val fettleHandler = GitHubFettleHandler(context)
     for (implementation in getImplementations<FettleCommand>()) {
         context.commandMap[implementation.simpleName] =
-            implementation.getDeclaredConstructor(CommandContext::class.java).newInstance(context)
+            implementation.getDeclaredConstructor(FettleHandler::class.java).newInstance(fettleHandler)
     }
+
     return context
 }
 
@@ -45,7 +49,7 @@ fun main(args: Array<String>) {
     }
 
     val parser = ArgParser("fettle-cli")
-    val context = createCommandContext(ghUser, ghToken)
+    val context = findFettleFunctions(ghUser, ghToken)
     parser.subcommands(*context.commandMap.values.toTypedArray())
     parser.parse(args)
     println("╭ᥥ╮(´• ᴗ •`˵)╭ᥥ╮")

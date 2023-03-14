@@ -1,6 +1,4 @@
 package dev.fidil.fettle
 
 
-class FettleApplicationTests {
-
-}
+class FettleApplicationTests
