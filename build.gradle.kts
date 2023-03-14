@@ -15,10 +15,12 @@ repositories {
 dependencies {
     implementation("org.kohsuke:github-api:1.313")
     implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3.5")
+    implementation("org.yaml:snakeyaml:2.0")
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+
 }
 
 application {
