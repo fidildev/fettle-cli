@@ -46,4 +46,10 @@ tasks {
         archiveExtension.set("tar.gz")
         compression = Compression.GZIP
     }
+
+    register("installGitHook", Copy::class) {
+        from("scripts/pre-commit")
+        into(".git/hooks")
+        fileMode
+    }
 }
