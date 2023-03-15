@@ -39,3 +39,10 @@ GH_TOKEN={github_token} /
 GH_USER={github_user} /
 ./fettle dependabot -o fidildev -r fettle
 ```
+
+Static Code Analysis Active
+```shell
+GH_TOKEN={github_token} /
+GH_USER={github_user} /
+./fettle staticCodeAnalysis -o fidildev -r fettle
+```

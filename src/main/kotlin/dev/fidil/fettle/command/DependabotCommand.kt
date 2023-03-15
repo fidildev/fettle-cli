@@ -14,6 +14,9 @@ class DependabotCommand(private val user: String, private val token: String) :
     private fun dependabotActive(org: String, repo: String, accessToken: String, githubUser: String): Boolean {
         val github = GitHubBuilder().withOAuthToken(accessToken, githubUser).build()
         return try {
+            val workflows = github.getRepository("$org/$repo").listWorkflows().toList()
+            !workflows.isNullOrEmpty()
+
             github.getRepository("$org/$repo").getFileContent("/.github/dependabot.yml")
             true
         } catch (e: Exception) {
