@@ -4,5 +4,5 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    labels:
+    commit-message:
       - "deps: "
