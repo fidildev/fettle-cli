@@ -22,6 +22,5 @@ class DependabotCommand(private val user: String, private val token: String) :
         } catch (e: Exception) {
             false
         }
-
     }
 }
