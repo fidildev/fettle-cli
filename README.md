@@ -10,7 +10,11 @@ Fist get a GitHub personal access token.
 
 Set the GitHub PAT in your environment as `GH_TOKEN`
 
-Running this command will also generate a precommit hook for ktlint formatting.
+Running this command will generate a precommit hook for ktlint formatting.
+```shell
+./gradlew addKtlintFormatGitPreCommitHook
+```
+
 ```shell
 ./gradlew build
 ```
