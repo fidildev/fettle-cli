@@ -1,12 +1,12 @@
 plugins {
     kotlin("jvm") version "1.8.10"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
     application
 }
 
 description = "Fettle Cli"
 group = "dev.fidil"
 version = "0.0.1-SNAPSHOT"
-//java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -20,7 +20,6 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-
 }
 
 application {
@@ -47,16 +46,12 @@ tasks {
         archiveExtension.set("tar.gz")
         compression = Compression.GZIP
     }
+
+    register("installGitHook", Copy::class) {
+        from("scripts/pre-commit")
+        into(".git/hooks")
+        fileMode
+    }
+
+    named("build") { dependsOn("addKtlintFormatGitPreCommitHook") }
 }
-
-
-//tasks.withType<KotlinCompile> {
-//    kotlinOptions {
-//        freeCompilerArgs = listOf("-Xjsr305=strict")
-//        jvmTarget = "17"
-//    }
-//}
-//
-//tasks.withType<Test> {
-//    useJUnitPlatform()
-//}

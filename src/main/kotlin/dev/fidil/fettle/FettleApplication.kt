@@ -13,7 +13,6 @@ import java.nio.file.Files
 import java.util.*
 import kotlin.system.exitProcess
 
-
 fun main(args: Array<String>) {
     createFettleConfigDirIfNotExists()
     checkFettleConfigPermissions()

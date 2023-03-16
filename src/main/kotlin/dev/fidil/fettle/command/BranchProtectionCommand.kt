@@ -20,7 +20,7 @@ class BranchProtectionCommand(private val user: String, private val token: Strin
         repo: String,
         branch: String,
         accessToken: String,
-        githubUser: String,
+        githubUser: String
     ): Boolean {
         val github = GitHubBuilder().withOAuthToken(accessToken, githubUser).build()
         return github.getRepository("$org/$repo").getBranch(branch).isProtected
