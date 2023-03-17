@@ -51,3 +51,10 @@ GH_TOKEN={github_token} /
 GH_USER={github_user} /
 ./fettle staticCodeAnalysis -o fidildev -r fettle
 ```
+
+Code Coverage Exists
+```shell
+GH_TOKEN={github_token} /
+GH_USER={github_user} /
+./fettle codeCoverage -o fidildev -r fettle
+```
