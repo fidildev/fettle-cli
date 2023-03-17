@@ -1,8 +1,6 @@
-@file:OptIn(ExperimentalCli::class)
 
 package dev.fidil.fettle.command
 
-import kotlinx.cli.*
 import org.kohsuke.github.GitHubBuilder
 
 class BranchProtectionCommand(private val user: String, private val token: String) :
