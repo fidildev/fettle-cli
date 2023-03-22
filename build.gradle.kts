@@ -1,20 +1,21 @@
 plugins {
     kotlin("jvm") version "1.8.10"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
     application
 }
 
 description = "Fettle Cli"
 group = "dev.fidil"
 version = "0.0.1-SNAPSHOT"
-//java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.kohsuke:github-api:1.313")
+    implementation("org.kohsuke:github-api:1.314")
     implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3.5")
+    implementation("org.yaml:snakeyaml:2.0")
     // https://mvnrepository.com/artifact/org.reflections/reflections
     implementation("org.reflections:reflections:0.10.2") {
         exclude("org.slf4j")
@@ -52,16 +53,13 @@ tasks {
         archiveExtension.set("tar.gz")
         compression = Compression.GZIP
     }
+
+    register("installGitHook", Copy::class) {
+        from("scripts/pre-commit")
+        into(".git/hooks")
+        fileMode
+    }
+
+//    named("build") { dependsOn("addKtlintFormatGitPreCommitHook") }
+//    named("addKtlintFormatGitPreCommitHook") { dependsOn("compileKotlin") }
 }
-
-
-//tasks.withType<KotlinCompile> {
-//    kotlinOptions {
-//        freeCompilerArgs = listOf("-Xjsr305=strict")
-//        jvmTarget = "17"
-//    }
-//}
-//
-//tasks.withType<Test> {
-//    useJUnitPlatform()
-//}

@@ -25,8 +25,46 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
         }
     }
 
-    override fun score(org: String, repo: String, branch: String): CommandResult {
+    override fun deploymentPipelines(org: String, repo: String, branch: String): CommandResult {
+        return if (api.getRepository("$org/$repo").listWorkflows().toList().isNotEmpty()) {
+            CommandResult.Passed("PASSED")
+        } else {
+            CommandResult.Failed("FAILED")
+        }
+    }
 
+    override fun staticAnalysis(org: String, repo: String, branch: String): CommandResult {
+        return try {
+            val hooks = api.getRepository("$org/$repo").hooks
+            if (hooks.isNotEmpty()) {
+                for (hook in hooks) {
+                    val hookUrl = hook.config.entries.find { it.key.toString() == "url" }
+                    if ((hookUrl?.value != null) && hookUrl.value!!.contains("codacy")) {
+                        return CommandResult.Passed("PASSED")
+                    }
+                }
+            }
+            CommandResult.Failed("FAILED")
+        } catch (e: Exception) {
+            CommandResult.Failed("FAILED")
+        }
+    }
+
+    override fun codeCoverage(org: String, repo: String, branch: String): CommandResult {
+        var searchResults = api.searchContent().repo("$org/$repo").filename("build.gradle.kts").list().toList()
+        if (searchResults.isEmpty()) {
+            searchResults = api.searchContent().repo("$org/$repo").filename("build.gradle").list().toList()
+        }
+        for (result in searchResults) {
+            val content = result.read().bufferedReader().use { it.readText() }
+            if (content.contains("apply plugin: 'jacoco'") || content.contains("apply plugin: \"jacoco\"")) {
+                return CommandResult.Passed("PASSED")
+            }
+        }
+        return CommandResult.Failed("FAILED")
+    }
+
+    override fun score(org: String, repo: String, branch: String): CommandResult {
         var count = 0.0
         if (this.branchProtections(org, repo, branch) == CommandResult.Passed("PASSED")) {
             count += 1.0
@@ -44,6 +82,4 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             else -> CommandResult.Score("F")
         }
     }
-
 }
-
