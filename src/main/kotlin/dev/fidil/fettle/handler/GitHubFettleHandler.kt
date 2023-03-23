@@ -7,29 +7,32 @@ import org.kohsuke.github.GitHubBuilder
 
 class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
 
+    private val passed = "PASSED"
+    private val failed = "FAILED"
+
     private val api: GitHub = GitHubBuilder().withOAuthToken(context.repoToken, context.repoUser).build()
     override fun branchProtections(org: String, repo: String, branch: String): CommandResult {
         return if (api.getRepository("$org/$repo").getBranch(branch).isProtected) {
-            CommandResult.Passed("PASSED")
+            CommandResult.Passed(passed)
         } else {
-            CommandResult.Failed("FAILED")
+            CommandResult.Failed(failed)
         }
     }
 
     override fun dependabot(org: String, repo: String, branch: String): CommandResult {
         return try {
             api.getRepository("$org/$repo").getFileContent("/.github/dependabot.yml")
-            CommandResult.Passed("PASSED")
+            CommandResult.Passed(passed)
         } catch (e: Exception) {
-            CommandResult.Failed("FAILED")
+            CommandResult.Failed(failed)
         }
     }
 
     override fun deploymentPipelines(org: String, repo: String, branch: String): CommandResult {
         return if (api.getRepository("$org/$repo").listWorkflows().toList().isNotEmpty()) {
-            CommandResult.Passed("PASSED")
+            CommandResult.Passed(passed)
         } else {
-            CommandResult.Failed("FAILED")
+            CommandResult.Failed(failed)
         }
     }
 
@@ -40,13 +43,13 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
                 for (hook in hooks) {
                     val hookUrl = hook.config.entries.find { it.key.toString() == "url" }
                     if ((hookUrl?.value != null) && hookUrl.value!!.contains("codacy")) {
-                        return CommandResult.Passed("PASSED")
+                        return CommandResult.Passed(passed)
                     }
                 }
             }
-            CommandResult.Failed("FAILED")
+            CommandResult.Failed(failed)
         } catch (e: Exception) {
-            CommandResult.Failed("FAILED")
+            CommandResult.Failed(failed)
         }
     }
 
@@ -58,31 +61,31 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
         for (result in searchResults) {
             val content = result.read().bufferedReader().use { it.readText() }
             if (content.contains("apply plugin: 'jacoco'") || content.contains("apply plugin: \"jacoco\"")) {
-                return CommandResult.Passed("PASSED")
+                return CommandResult.Passed(passed)
             }
         }
-        return CommandResult.Failed("FAILED")
+        return CommandResult.Failed(failed)
     }
 
     override fun score(org: String, repo: String, branch: String): CommandResult {
         var count = 0.0
-        if (this.branchProtections(org, repo, branch) == CommandResult.Passed("PASSED")) {
+        if (this.branchProtections(org, repo, branch) == CommandResult.Passed(passed)) {
             count += 1.0
         }
 
-        if (this.dependabot(org, repo, branch) == CommandResult.Passed("PASSED")) {
+        if (this.dependabot(org, repo, branch) == CommandResult.Passed(passed)) {
             count += 1.0
         }
 
-        if (this.codeCoverage(org, repo, branch) == CommandResult.Passed("PASSED")) {
+        if (this.codeCoverage(org, repo, branch) == CommandResult.Passed(passed)) {
             count += 1.0
         }
 
-        if (this.deploymentPipelines(org, repo, branch) == CommandResult.Passed("PASSED")) {
+        if (this.deploymentPipelines(org, repo, branch) == CommandResult.Passed(passed)) {
             count += 1.0
         }
 
-        if (this.staticAnalysis(org, repo, branch) == CommandResult.Passed("PASSED")) {
+        if (this.staticAnalysis(org, repo, branch) == CommandResult.Passed(passed)) {
             count += 1.0
         }
 

@@ -10,17 +10,19 @@
 
 ## [ADRs](https://fidildev.github.io/fettle/doc/adr/index.html)
 
-## Building
-
-Fist get a GitHub personal access token.
-
-Set the GitHub PAT in your environment as `GH_TOKEN`
+## Prehook setup
 
 Running this command will generate a precommit hook for ktlint formatting.
 
 ```shell
 ./gradlew addKtlintFormatGitPreCommitHook
 ```
+
+## Building
+
+Fist get a GitHub personal access token.
+
+Set the GitHub PAT in your environment as `GH_TOKEN`
 
 ```shell
 ./gradlew build
@@ -93,4 +95,12 @@ Code Coverage Exists
 GH_TOKEN={github_token} /
 GH_USER={github_user} /
 ./fettle codeCoverage -o fidildev -r fettle
+```
+
+Deployment Pipelines Exist
+
+```shell
+GH_TOKEN={github_token} /
+GH_USER={github_user} /
+./fettle checkForDeployments -o fidildev -r fettle
 ```
