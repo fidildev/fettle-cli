@@ -10,18 +10,18 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
     private val api: GitHub = GitHubBuilder().withOAuthToken(context.repoToken, context.repoUser).build()
     override fun branchProtections(org: String, repo: String, branch: String): CommandResult {
         return if (api.getRepository("$org/$repo").getBranch(branch).isProtected) {
-            CommandResult.Passed("")
+            CommandResult.Passed("PASSED")
         } else {
-            CommandResult.Failed("FAIL")
+            CommandResult.Failed("FAILED")
         }
     }
 
     override fun dependabot(org: String, repo: String, branch: String): CommandResult {
         return try {
             api.getRepository("$org/$repo").getFileContent("/.github/dependabot.yml")
-            CommandResult.Passed("")
+            CommandResult.Passed("PASSED")
         } catch (e: Exception) {
-            CommandResult.Failed("FAIL")
+            CommandResult.Failed("FAILED")
         }
     }
 
