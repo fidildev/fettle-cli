@@ -2,18 +2,46 @@
 
 package dev.fidil.fettle
 
-import dev.fidil.fettle.command.BranchProtectionCommand
-import dev.fidil.fettle.command.CheckForDeploymentCommand
-import dev.fidil.fettle.command.CodeCoverageCommand
-import dev.fidil.fettle.command.DependabotCommand
-import dev.fidil.fettle.command.StaticCodeAnalysisCommand
+import dev.fidil.fettle.CommandFactory.getImplementations
+import dev.fidil.fettle.command.FettleCommand
+import dev.fidil.fettle.command.FettleContext
 import dev.fidil.fettle.config.GitHubConfig
+import dev.fidil.fettle.handler.FettleHandler
+import dev.fidil.fettle.handler.GitHubFettleHandler
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ExperimentalCli
+import org.reflections.Reflections
 import org.yaml.snakeyaml.Yaml
+import java.lang.reflect.Modifier
 import java.nio.file.Files
 import java.util.*
 import kotlin.system.exitProcess
+
+object CommandFactory {
+    inline fun <reified T> getImplementations(): List<Class<out T>> {
+        val classes = mutableListOf<Class<out T>>()
+        val reflections = Reflections("dev.fidil.fettle")
+        val subTypes = reflections.getSubTypesOf(T::class.java)
+        for (subType in subTypes) {
+            if (Modifier.isAbstract(subType.modifiers)) {
+                continue
+            }
+            classes.add(subType as Class<out T>)
+        }
+        return classes
+    }
+}
+
+fun findFettleFunctions(user: String, token: String): FettleContext {
+    val context = FettleContext(user, token)
+    val fettleHandler = GitHubFettleHandler(context)
+    for (implementation in getImplementations<FettleCommand>()) {
+        context.commandMap[implementation.simpleName] =
+            implementation.getDeclaredConstructor(FettleHandler::class.java).newInstance(fettleHandler)
+    }
+
+    return context
+}
 
 fun main(args: Array<String>) {
     createFettleConfigDirIfNotExists()
@@ -21,15 +49,15 @@ fun main(args: Array<String>) {
     val (ghUser, ghToken) = getGitHubConfig()
 
     val parser = ArgParser("fettle-cli")
-    parser.subcommands(BranchProtectionCommand(ghUser, ghToken), CheckForDeploymentCommand(ghUser, ghToken), DependabotCommand(ghUser, ghToken), StaticCodeAnalysisCommand(ghUser, ghToken), CodeCoverageCommand(ghUser, ghToken))
+    val context = findFettleFunctions(ghUser, ghToken)
+    parser.subcommands(*context.commandMap.values.toTypedArray())
     parser.parse(args)
-
     println("╭ᥥ╮(´• ᴗ •`˵)╭ᥥ╮")
 }
+
 fun createFettleConfigDirIfNotExists() {
     if (!GitHubConfig.fettleDir.exists()) {
-        if (GitHubConfig.fettleDir.mkdir()) {
-        } else {
+        if (!GitHubConfig.fettleDir.mkdir()) {
             println("Warning: Failed to create the fettle config directory.")
         }
     }

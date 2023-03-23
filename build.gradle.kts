@@ -16,6 +16,13 @@ dependencies {
     implementation("org.kohsuke:github-api:1.314")
     implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3.5")
     implementation("org.yaml:snakeyaml:2.0")
+    // https://mvnrepository.com/artifact/org.reflections/reflections
+    implementation("org.reflections:reflections:0.10.2") {
+        exclude("org.slf4j")
+    }
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    implementation("org.slf4j:slf4j-simple:2.0.6")
+
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     // Use the Kotlin JUnit integration.

@@ -1,26 +1,11 @@
-
 package dev.fidil.fettle.command
 
-import org.kohsuke.github.GitHubBuilder
+import dev.fidil.fettle.handler.FettleHandler
 
-class BranchProtectionCommand(private val user: String, private val token: String) :
+class BranchProtectionCommand(override val handler: FettleHandler) :
     GitHubRepoSubCommand("branchProtection", "Validate Branch protection is enabled") {
 
-    private var result: Boolean = false
-
-    override fun execute() {
-        result = branchProtectionEnabled(org, repo, branch, token, user)
-        println("Branch Protection Enabled: $result")
-    }
-
-    private fun branchProtectionEnabled(
-        org: String,
-        repo: String,
-        branch: String,
-        accessToken: String,
-        githubUser: String
-    ): Boolean {
-        val github = GitHubBuilder().withOAuthToken(accessToken, githubUser).build()
-        return github.getRepository("$org/$repo").getBranch(branch).isProtected
+    override fun processCommand(): CommandResult {
+        return handler.branchProtections(org, repo, branch)
     }
 }

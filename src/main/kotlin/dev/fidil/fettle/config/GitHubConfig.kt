@@ -9,6 +9,7 @@ data class GitHubConfig(var github: GitHub) {
         val configFile = File(fettleDir, "config.yaml")
         val requiredFilePermission = PosixFilePermissions.fromString("rw-------")
     }
+
     constructor() : this(GitHub("", ""))
 }
 
