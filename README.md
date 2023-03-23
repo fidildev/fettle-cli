@@ -1,5 +1,9 @@
 # fettle
 
+<p align="center">
+  <img src="/doc/diagrams/fettle-logo.png">
+</p>
+
 ## [Product Requirements](./doc/prd.md)
 
 ## [Architecture](./doc/architecture.md)
