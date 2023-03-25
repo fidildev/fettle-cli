@@ -20,7 +20,7 @@ Running this command will generate a precommit hook for ktlint formatting.
 
 ## Building
 
-Fist get a GitHub personal access token.
+First get a GitHub personal access token.
 
 Set the GitHub PAT in your environment as `GH_TOKEN`
 
