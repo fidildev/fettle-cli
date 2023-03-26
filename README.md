@@ -63,7 +63,7 @@ cd fettle-0.0.1-SNAPSHOT/bin
 Running Fettle Functions requires two environment variables to be set
 
 1. `export GH_USER = <yourGitHubUser>`
-1. `GH_TOKEN = <yourGitHubPersonalAccessToken>`
+2. `export GH_TOKEN = <yourGitHubPersonalAccessToken>`
 
 ### Arguments
 
