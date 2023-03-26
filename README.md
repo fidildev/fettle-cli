@@ -6,7 +6,7 @@
 
 ## Overview
 
-- [What is Fettle?](#what-is-fettle)
+- [What is Fettle](#what-is-fettle)
 - [Product Requirements](./doc/prd.md)
 - [Architecture](./doc/architecture.md)
   - [Architecture Decision Records (ARDs)](https://fidildev.github.io/fettle/doc/adr/index.html)
@@ -29,7 +29,6 @@ A specific check, inspired by fitness functions.
 | [Dependabot Configured](#dependabot-configured)      | Validates Dependabot is configured           |
 | [Deployment Pipelines](#deployment-pipelines-exist)  | Validates the repo uses deployment pipelines |
 | [Static Code Analysis](#static-code-analysis-active) | Validates static code analysis exists        |
-
 
 ## Contributing
 
