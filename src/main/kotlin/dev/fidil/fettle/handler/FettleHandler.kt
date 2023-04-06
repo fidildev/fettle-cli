@@ -24,7 +24,7 @@ interface FettleHandler {
         }
     }
 
-    fun findFettleFunctions(): Map<String, FettleHandler> {
+    fun getScoreHandlers(): Map<String, FettleHandler> {
         val scoreMethodMap = HashMap<String, FettleHandler>()
         for (implementation in dev.fidil.fettle.CommandFactory.getImplementations<FettleHandler>()) {
             if (implementation.simpleName == "score") {
