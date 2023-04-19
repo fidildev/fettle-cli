@@ -68,28 +68,17 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
     }
 
     override fun score(org: String, repo: String, branch: String): CommandResult {
-        var count = 0.0
-        if (this.branchProtections(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
+        val scoreHandlers = getScoreHandlers()
+        var total = 0.0
+        for (scoreHandler in scoreHandlers.keys) {
+            // call each handler
+            val response = scoreHandlers[scoreHandler]!!.score(org, repo, branch)
+            if (response == CommandResult.Passed(passed)) {
+                total += 1.0
+            }
         }
 
-        if (this.dependabot(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
-        }
-
-        if (this.codeCoverage(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
-        }
-
-        if (this.deploymentPipelines(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
-        }
-
-        if (this.staticAnalysis(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
-        }
-
-        return when (count / context.commandMap.size) {
+        return when ((total / context.commandMap.size) * 100) {
             in 90.0..100.0 -> CommandResult.Score("A")
             in 80.0..89.9 -> CommandResult.Score("B")
             in 70.0..79.9 -> CommandResult.Score("C")
