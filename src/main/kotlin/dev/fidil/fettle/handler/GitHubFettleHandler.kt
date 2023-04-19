@@ -89,7 +89,7 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             count += 1.0
         }
 
-        return when (count / context.commandMap.size) {
+        return when (count / (context.commandMap.size - 1) * 100) {
             in 90.0..100.0 -> CommandResult.Score("A")
             in 80.0..89.9 -> CommandResult.Score("B")
             in 70.0..79.9 -> CommandResult.Score("C")
