@@ -26,12 +26,12 @@ interface FettleHandler {
 
     fun getScoreHandlers(): Map<String, FettleHandler> {
         val scoreMethodMap = HashMap<String, FettleHandler>()
-        for (implementation in dev.fidil.fettle.CommandFactory.getImplementations<FettleHandler>()) {
+        for (implementation in CommandFactory.getImplementations<FettleHandler>()) {
             if (implementation.simpleName == "score") {
                 continue
             } else {
                 scoreMethodMap[implementation.simpleName] =
-                    implementation.getDeclaredConstructor(FettleHandler::class.java).newInstance()
+                    implementation.getDeclaredConstructor(FettleContext::class.java).newInstance(context)
             }
         }
 
