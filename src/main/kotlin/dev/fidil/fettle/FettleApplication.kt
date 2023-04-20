@@ -75,8 +75,11 @@ fun checkFettleConfigPermissions() {
 }
 
 fun getGitHubConfig(): Pair<String, String> {
-    var ghUser: String? = null
-    var ghToken: String? = null
+    val ghUserEnv = System.getenv("GH_USER")
+    val ghTokenEnv = System.getenv("GH_TOKEN")
+
+    var ghUserConfig: String? = null
+    var ghTokenConfig: String? = null
 
     if (GitHubConfig.configFile.exists()) {
         val yaml = Yaml()
@@ -84,18 +87,13 @@ fun getGitHubConfig(): Pair<String, String> {
 
         if (configData != null) {
             val githubConfig = configData.github
-            ghUser = githubConfig.user
-            ghToken = githubConfig.token
+            ghUserConfig = githubConfig.user
+            ghTokenConfig = githubConfig.token
         }
     }
 
-    if (ghUser == null) {
-        ghUser = System.getenv("GH_USER")
-    }
-
-    if (ghToken == null) {
-        ghToken = System.getenv("GH_TOKEN")
-    }
+    val ghUser = ghUserEnv ?: ghUserConfig
+    val ghToken = ghTokenEnv ?: ghTokenConfig
 
     if (ghToken == null || ghUser == null) {
         println("A valid GitHub user and token are required to be in your fettle config or in your environment. Environment Example: \nexport GH_TOKEN=sometoken\nexport GH_USER=myuser")
