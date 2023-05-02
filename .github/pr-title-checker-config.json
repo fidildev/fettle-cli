@@ -4,7 +4,13 @@
       "color": "EEEEEE"
     },
     "CHECKS": {
-      "prefixes": ["feat: ", "fix: ", "deps: ", "docs: ", "chore: ", "breaking change: "]
+      "prefixes": [
+        "breaking change: ",
+        "chore: ",
+        "deps: ", 
+        "docs: ",
+        "feat: ", 
+        "fix: "]
     },
     "MESSAGES": {
       "success": "All OK",
