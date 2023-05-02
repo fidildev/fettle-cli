@@ -1,0 +1,41 @@
+plugins:
+  - "@semantic-release/commit-analyzer"
+  - "@semantic-release/release-notes-generator"
+  - "@semantic-release/github"
+
+branches:
+  - "main"
+
+commit-analyzer:
+  preset: "conventionalcommits"
+  releaseRules:
+    - breaking: true
+      release: major
+    - type: chore
+      release: patch
+    - type: deps
+      release: patch
+    - type: docs
+      release: patch
+    - type: feat
+      release: minor
+    - type: fix
+      release: patch
+
+release-notes-generator:
+  preset: "angular"
+  parserOpts:
+    headerPattern: "^([a-zA-Z]+)(?:\\(([a-zA-Z]+)\\))?!?: (.*)$"
+    headerCorrespondence:
+      - type
+      - scope
+      - subject
+    noteKeywords:
+      - "BREAKING CHANGE"
+      - "BREAKING CHANGES"
+      - "BREAKING"
+    issuePrefixes:
+      - "#"
+
+# Publish a new release to GitHub
+github:
