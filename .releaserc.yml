@@ -4,7 +4,7 @@ plugins:
   - "@semantic-release/github"
 
 branches:
-  - "70"
+  - "main"
 
 commit-analyzer:
   preset: "conventionalcommits"
