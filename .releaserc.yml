@@ -39,6 +39,3 @@ release-notes-generator:
 
 # Publish a new release to GitHub
 github:
-  assets:
-    - path: "dist/*.tgz"
-      label: "Release package"
