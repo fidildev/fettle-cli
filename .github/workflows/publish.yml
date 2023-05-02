@@ -1,0 +1,12 @@
+name: Publish
+on:
+  push:
+    branches:
+      - "70"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name : Commit Message
+        run: echo Commit Message ${{ github.event.push.head_commit.message }}
