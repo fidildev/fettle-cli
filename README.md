@@ -121,6 +121,13 @@ Fettle Score: F
 ./fettle staticCodeAnalysis -o fidildev -r fettle
 ```
 
+#### Readme Exists
+
+```shell
+./fettle readme -o fidildev -r fettle
+```
+
+
 ## Star Count
 
 [![Stargazers over time](https://starchart.cc/fidildev/fettle.svg)](https://starchart.cc/fidildev/fettle)

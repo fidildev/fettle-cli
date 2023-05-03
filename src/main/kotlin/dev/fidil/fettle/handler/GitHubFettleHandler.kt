@@ -4,6 +4,7 @@ import dev.fidil.fettle.command.CommandResult
 import dev.fidil.fettle.command.FettleContext
 import org.kohsuke.github.GitHub
 import org.kohsuke.github.GitHubBuilder
+import java.io.IOException
 
 class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
 
@@ -67,6 +68,20 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
         return CommandResult.Failed(failed)
     }
 
+    override fun readme(org: String, repo: String, branch: String): CommandResult {
+        val repository = api.getRepository("$org/$repo")
+        val readmeLocations = arrayOf("README.md", "/docs/README.md", "/.github/README.md")
+
+        for (location in readmeLocations) {
+            try {
+                repository.getFileContent(location)
+                return CommandResult.Passed(passed)
+            } catch (ignore: IOException) {}
+        }
+
+        return CommandResult.Passed(failed)
+    }
+
     override fun score(org: String, repo: String, branch: String): CommandResult {
         var count = 0.0
         if (this.branchProtections(org, repo, branch) == CommandResult.Passed(passed)) {
@@ -86,6 +101,10 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
         }
 
         if (this.staticAnalysis(org, repo, branch) == CommandResult.Passed(passed)) {
+            count += 1.0
+        }
+
+        if (this.readme(org, repo, branch) == CommandResult.Passed(passed)) {
             count += 1.0
         }
 
