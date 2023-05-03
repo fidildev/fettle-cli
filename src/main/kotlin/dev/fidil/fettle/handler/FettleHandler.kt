@@ -18,4 +18,6 @@ interface FettleHandler {
     fun codeCoverage(org: String, repo: String, branch: String): CommandResult
 
     fun score(org: String, repo: String, branch: String): CommandResult
+
+    fun readme(org: String, repo: String, branch: String): CommandResult
 }
