@@ -8,22 +8,40 @@ interface FettleHandler {
 
     val context: FettleContext
 
-    @FettleFunction("Branch Protection")
+    @FettleFunction(
+        "Branch Protection",
+        "Turn on branch protection for your default branch as a best practice."
+    )
     fun branchProtections(org: String, repo: String, branch: String): CommandResult
 
-    @FettleFunction("Dependabot")
+    @FettleFunction(
+        "Dependabot",
+        "Enable Dependabot on your repo to check for security issues."
+    )
     fun dependabot(org: String, repo: String, branch: String): CommandResult
 
-    @FettleFunction("Deployment Pipelines")
+    @FettleFunction(
+        "Deployment Pipelines",
+        "Add GitHub Action Workflows to your repo to build and deploy the software."
+    )
     fun deploymentPipelines(org: String, repo: String, branch: String): CommandResult
 
-    @FettleFunction("Static Analysis")
+    @FettleFunction(
+        "Static Analysis",
+        "Add Codacy integration to your repo for Static Code Analysis."
+    )
     fun staticAnalysis(org: String, repo: String, branch: String): CommandResult
 
-    @FettleFunction("Code Coverage")
+    @FettleFunction(
+        "Code Coverage",
+        "Add jacoco to your repo to measure code coverage."
+    )
     fun codeCoverage(org: String, repo: String, branch: String): CommandResult
 
-    @FettleFunction("Readme")
+    @FettleFunction(
+        "Readme",
+        "Add a Readme to your repo to inform others about what this repo is about."
+    )
     fun readme(org: String, repo: String, branch: String): CommandResult
 
     fun score(org: String, repo: String, branch: String): CommandResult
