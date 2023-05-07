@@ -85,7 +85,17 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             } catch (ignore: IOException) {}
         }
 
-        return CommandResult.Passed(failed)
+        return CommandResult.Failed(failed)
+    }
+
+    override fun defaultBranchName(org: String, repo: String, branch: String): CommandResult {
+        val defaultBranchName = api.getRepository("$org/$repo").defaultBranch
+
+        if (defaultBranchName?.lowercase() == "master") {
+            return CommandResult.Failed(failed)
+        }
+
+        return CommandResult.Passed(passed)
     }
 
     override fun score(org: String, repo: String): CommandResult {
@@ -114,7 +124,7 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             }
         }
 
-        return when (val percentage = count / (context.commandMap.size - 1) * 100) {
+        return when (val percentage = count / (annotatedMethods.size) * 100) {
             in 90.0..100.0 -> CommandResult.Score("A", percentage)
             in 80.0..89.9 -> CommandResult.Score("B", percentage)
             in 70.0..79.9 -> CommandResult.Score("C", percentage)
