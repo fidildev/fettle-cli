@@ -26,5 +26,7 @@ interface FettleHandler {
     @FettleFunction("Readme")
     fun readme(org: String, repo: String, branch: String): CommandResult
 
-    fun score(org: String, repo: String, branch: String): CommandResult
+    fun score(org: String, repo: String): CommandResult
+
+    fun orgScore(org: String): CommandResult
 }

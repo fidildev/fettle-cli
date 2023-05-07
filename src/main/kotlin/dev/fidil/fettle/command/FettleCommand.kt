@@ -13,6 +13,7 @@ abstract class FettleCommand(name: String, actionDescription: String) : Subcomma
             is CommandResult.Passed -> println(result.message)
             is CommandResult.Failed -> println(result.message)
             is CommandResult.Score -> println("Fettle Score: ${result.score}")
+            is CommandResult.OrgScore -> println("Fettle Org Score: ${result.orgScore}")
         }
     }
 
@@ -22,5 +23,7 @@ abstract class FettleCommand(name: String, actionDescription: String) : Subcomma
 sealed class CommandResult {
     data class Passed(val message: String) : CommandResult()
     data class Failed(val message: String) : CommandResult()
-    data class Score(val score: String) : CommandResult()
+    data class Score(val score: String, val percentage: Double) : CommandResult()
+
+    data class OrgScore(val orgScore: String) : CommandResult()
 }

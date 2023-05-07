@@ -9,6 +9,7 @@ import org.reflections.Reflections
 import org.reflections.scanners.Scanners
 import org.reflections.util.ConfigurationBuilder
 import java.io.IOException
+import java.lang.reflect.InvocationTargetException
 
 class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
 
@@ -87,7 +88,7 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
         return CommandResult.Passed(failed)
     }
 
-    override fun score(org: String, repo: String, branch: String): CommandResult {
+    override fun score(org: String, repo: String): CommandResult {
         var count = 0.0
 
         val reflections = Reflections(
@@ -96,9 +97,15 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
                 .setScanners(Scanners.MethodsAnnotated)
         )
         val annotatedMethods = reflections.getMethodsAnnotatedWith(FettleFunction::class.java)
+        println(repo)
         for (method in annotatedMethods) {
             val ffName = method.getDeclaredAnnotation(FettleFunction::class.java).name
-            val result = method.invoke(this, org, repo, branch)
+            val result = try {
+                method.invoke(this, org, repo, "main")
+            } catch (e: InvocationTargetException) {
+                method.invoke(this, org, repo, "master")
+            }
+
             if (result == CommandResult.Passed(passed)) {
                 println("\u2705 $ffName")
                 count += 1.0
@@ -107,16 +114,29 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             }
         }
 
-        if (this.readme(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
+        return when (val percentage = count / (context.commandMap.size - 1) * 100) {
+            in 90.0..100.0 -> CommandResult.Score("A", percentage)
+            in 80.0..89.9 -> CommandResult.Score("B", percentage)
+            in 70.0..79.9 -> CommandResult.Score("C", percentage)
+            in 60.0..69.9 -> CommandResult.Score("D", percentage)
+            else -> CommandResult.Score("F", percentage)
+        }
+    }
+
+    override fun orgScore(org: String): CommandResult {
+        var orgScore = 0.0
+        val repositories = api.getOrganization(org).repositories
+        repositories.forEach {
+            val score = this.score(org, it.value.name) as CommandResult.Score
+            orgScore += score.percentage
         }
 
-        return when (count / (context.commandMap.size - 1) * 100) {
-            in 90.0..100.0 -> CommandResult.Score("A")
-            in 80.0..89.9 -> CommandResult.Score("B")
-            in 70.0..79.9 -> CommandResult.Score("C")
-            in 60.0..69.9 -> CommandResult.Score("D")
-            else -> CommandResult.Score("F")
+        return when (orgScore / repositories.size) {
+            in 90.0..100.0 -> CommandResult.OrgScore("A")
+            in 80.0..89.9 -> CommandResult.OrgScore("B")
+            in 70.0..79.9 -> CommandResult.OrgScore("C")
+            in 60.0..69.9 -> CommandResult.OrgScore("D")
+            else -> CommandResult.OrgScore("F")
         }
     }
 }
