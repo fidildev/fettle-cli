@@ -84,7 +84,17 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             } catch (ignore: IOException) {}
         }
 
-        return CommandResult.Passed(failed)
+        return CommandResult.Failed(failed)
+    }
+
+    override fun defaultBranchName(org: String, repo: String, branch: String): CommandResult {
+        val defaultBranchName = api.getRepository("$org/$repo").defaultBranch
+
+        if (defaultBranchName?.lowercase() == "master") {
+            return CommandResult.Failed(failed)
+        }
+
+        return CommandResult.Passed(passed)
     }
 
     override fun score(org: String, repo: String, branch: String): CommandResult {

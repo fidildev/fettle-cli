@@ -44,5 +44,11 @@ interface FettleHandler {
     )
     fun readme(org: String, repo: String, branch: String): CommandResult
 
+    @FettleFunction(
+        "Default Branch Name",
+        "Change your default branch name from master to main"
+    )
+    fun defaultBranchName(org: String, repo: String, branch: String): CommandResult
+
     fun score(org: String, repo: String, branch: String): CommandResult
 }
