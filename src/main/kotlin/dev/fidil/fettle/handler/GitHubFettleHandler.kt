@@ -108,10 +108,6 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             }
         }
 
-        if (this.readme(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
-        }
-
         return when (count / (context.commandMap.size - 1) * 100) {
             in 90.0..100.0 -> CommandResult.Score("A")
             in 80.0..89.9 -> CommandResult.Score("B")
