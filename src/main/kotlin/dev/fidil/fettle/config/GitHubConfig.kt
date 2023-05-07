@@ -16,3 +16,7 @@ data class GitHubConfig(var github: GitHub) {
 data class GitHub(var user: String?, var token: String?) {
     constructor() : this(null, null)
 }
+
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class FettleFunction(val name: String)
