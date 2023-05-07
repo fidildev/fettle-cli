@@ -124,7 +124,7 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             }
         }
 
-        return when (val percentage = count / (context.commandMap.size - 1) * 100) {
+        return when (val percentage = count / (annotatedMethods.size) * 100) {
             in 90.0..100.0 -> CommandResult.Score("A", percentage)
             in 80.0..89.9 -> CommandResult.Score("B", percentage)
             in 70.0..79.9 -> CommandResult.Score("C", percentage)
