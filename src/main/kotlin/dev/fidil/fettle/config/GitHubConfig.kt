@@ -19,4 +19,4 @@ data class GitHub(var user: String?, var token: String?) {
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class FettleFunction(val name: String)
+annotation class FettleFunction(val name: String, val failMessage: String)
