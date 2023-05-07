@@ -74,6 +74,13 @@ Running Fettle Functions requires two environment variables to be set
 
 ### Getting Fettle Grade
 
+#### Org
+
+```shell
+./fettle orgScore -o fidildev
+```
+#### Repo
+
 ```shell
 ./fettle score -o fidildev -r fettle
 ```
