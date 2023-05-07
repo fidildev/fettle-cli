@@ -98,17 +98,14 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
         val annotatedMethods = reflections.getMethodsAnnotatedWith(FettleFunction::class.java)
         for (method in annotatedMethods) {
             val ffName = method.getDeclaredAnnotation(FettleFunction::class.java).name
+            val ffFailMessage = method.getDeclaredAnnotation(FettleFunction::class.java).failMessage
             val result = method.invoke(this, org, repo, branch)
             if (result == CommandResult.Passed(passed)) {
                 println("\u2705 $ffName")
                 count += 1.0
             } else {
-                println("\u274C $ffName")
+                println("\u274C $ffName: $ffFailMessage")
             }
-        }
-
-        if (this.readme(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
         }
 
         return when (count / (context.commandMap.size - 1) * 100) {
