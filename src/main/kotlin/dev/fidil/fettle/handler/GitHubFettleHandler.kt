@@ -2,8 +2,12 @@ package dev.fidil.fettle.handler
 
 import dev.fidil.fettle.command.CommandResult
 import dev.fidil.fettle.command.FettleContext
+import dev.fidil.fettle.config.FettleFunction
 import org.kohsuke.github.GitHub
 import org.kohsuke.github.GitHubBuilder
+import org.reflections.Reflections
+import org.reflections.scanners.Scanners
+import org.reflections.util.ConfigurationBuilder
 import java.io.IOException
 
 class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
@@ -12,6 +16,7 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
     private val failed = "FAILED"
 
     private val api: GitHub = GitHubBuilder().withOAuthToken(context.repoToken, context.repoUser).build()
+
     override fun branchProtections(org: String, repo: String, branch: String): CommandResult {
         return if (api.getRepository("$org/$repo").getBranch(branch).isProtected) {
             CommandResult.Passed(passed)
@@ -84,24 +89,22 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
 
     override fun score(org: String, repo: String, branch: String): CommandResult {
         var count = 0.0
-        if (this.branchProtections(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
-        }
 
-        if (this.dependabot(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
-        }
-
-        if (this.codeCoverage(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
-        }
-
-        if (this.deploymentPipelines(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
-        }
-
-        if (this.staticAnalysis(org, repo, branch) == CommandResult.Passed(passed)) {
-            count += 1.0
+        val reflections = Reflections(
+            ConfigurationBuilder()
+                .setUrls(ClassLoader.getSystemClassLoader().getResource(""))
+                .setScanners(Scanners.MethodsAnnotated)
+        )
+        val annotatedMethods = reflections.getMethodsAnnotatedWith(FettleFunction::class.java)
+        for (method in annotatedMethods) {
+            val ffName = method.getDeclaredAnnotation(FettleFunction::class.java).name
+            val result = method.invoke(this, org, repo, branch)
+            if (result == CommandResult.Passed(passed)) {
+                println("\u2705 $ffName")
+                count += 1.0
+            } else {
+                println("\u274C $ffName")
+            }
         }
 
         if (this.readme(org, repo, branch) == CommandResult.Passed(passed)) {
