@@ -134,6 +134,18 @@ Fettle Score: F
 ./fettle readme -o fidildev -r fettle
 ```
 
+#### Default Branch Name
+
+```shell
+./fettle defaultBranchName -o fidildev -r fettle
+```
+
+#### Deployment Frequency
+
+```shell
+./fettle deploymentFrequency -o fidildev -r fettle
+```
+
 
 ## Star Count
 

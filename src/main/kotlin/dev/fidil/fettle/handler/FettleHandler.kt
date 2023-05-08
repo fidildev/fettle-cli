@@ -50,6 +50,12 @@ interface FettleHandler {
     )
     fun defaultBranchName(org: String, repo: String, branch: String): CommandResult
 
+    @FettleFunction(
+        "Deployment Frequency",
+        "Elite performing teams deploy multiple times a day"
+    )
+    fun deploymentFrequency(org: String, repo: String, branch: String): CommandResult
+
     fun score(org: String, repo: String): CommandResult
 
     fun orgScore(org: String): CommandResult
