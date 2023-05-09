@@ -1,4 +1,4 @@
-name: Publish
+name: PublishV2
 on:
   pull_request:
     branches:
@@ -35,14 +35,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
       - name: Version
-        id: version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: the_version = npx semantic-release --v >> "$GITHUB_OUTPUT" |
+        id: version
+        run: the_version = npx semantic-release --v |
           echo "version=$the_version" >> "$GITHUB_OUTPUT"
-
-
-
   publish:
     runs-on: ubuntu-latest
     steps:
