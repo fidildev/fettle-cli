@@ -11,6 +11,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    outputs:
+      output: ${{ steps.version.outputs.version }}
     permissions:
       contents: write # to be able to publish a GitHub release
       issues: write # to be able to comment on released issues
@@ -31,34 +33,39 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release --v
+        run: npx semantic-release
+      - name: Version
+        id: version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: the_version = npx semantic-release --v >> "$GITHUB_OUTPUT" |
+          echo "version=$the_version" >> "$GITHUB_OUTPUT"
 
-#      - name: Release
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: npx semantic-release
 
-#  publish:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-java@v3
-#        with:
-#          distribution: temurin
-#          java-version: 17
-#      - name: Setup Gradle
-#        uses: gradle/gradle-build-action@v2
-#      - name: Execute Gradle build
-#        run: ./gradlew -PprojectVersion= test assemble installDist
-#      - name: Archive binaries
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: binaries
-#          path: build/install
-#          retention-days: 1
-#      - name: Archive distribution
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: distribution
-#          path: build/distributions
-#          retention-days: 1
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          VERSION: ${{needs.release.outputs.output}}
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Execute Gradle build
+        run: ./gradlew -PprojectVersion=$VERSION test assemble installDist
+      - name: Archive binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: binaries
+          path: build/install
+          retention-days: 1
+      - name: Archive distribution
+        uses: actions/upload-artifact@v3
+        with:
+          name: distribution
+          path: build/distributions
+          retention-days: 1

@@ -6,7 +6,7 @@ plugins {
 
 description = "Fettle Cli"
 group = "dev.fidil"
-version = "0.0.1-SNAPSHOT"
+version = project.properties["projectVersion"] ?: "0.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
