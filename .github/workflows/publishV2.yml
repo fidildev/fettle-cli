@@ -30,16 +30,13 @@ jobs:
         run: npm clean-install
       - name: Verify the integrity of dependencies
         run: npm audit signatures
-      - name: Release
+      - name: Semantic Release
+        id: semantic-release
+        uses: semantic-release/action@v2
+        with:
+          debug: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
-      - name: Version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: version
-        run: |
-          echo "version=$( npx semantic-release --v )" >> "$GITHUB_OUTPUT"
   publish:
     runs-on: ubuntu-latest
     needs: release
@@ -54,7 +51,7 @@ jobs:
       - name: Execute Gradle build
         env:
           VERSION: ${{needs.release.outputs.output}}
-        run: ./gradlew -PprojectVersion=$VERSION test assemble installDist
+        run: ./gradlew -PprojectVersion=${{ release.steps.semantic-release.outputs.version }} test assemble installDist
       - name: Archive binaries
         uses: actions/upload-artifact@v3
         with:
