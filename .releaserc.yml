@@ -5,7 +5,6 @@ plugins:
 
 branches:
   - "main"
-  - "83"
 
 commit-analyzer:
   preset: "conventionalcommits"

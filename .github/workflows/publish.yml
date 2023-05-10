@@ -1,31 +1,42 @@
-name: Publish
+name: Release
+
 on:
   push:
     branches:
-      - "main"
+      - main
 
 jobs:
   release:
-    name: Release
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Setup JDK
+        uses: actions/setup-java@v2
         with:
-          fetch-depth: 0
-      - name: Setup Node.js
+          java-version: 17
+
+      - name: Install Node.js and npm
         uses: actions/setup-node@v3
         with:
-          node-version: "lts/*"
+          node-version: '16'
+
+      - name: Install Gradle
+        run: sudo apt-get update && sudo apt-get install -y gradle
+
       - name: Install dependencies
-        run: npm clean-install
-      - name: Verify the integrity of dependencies
-        run: npm audit signatures
+        run: npm install
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release --no-ci
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist/
