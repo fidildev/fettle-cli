@@ -32,6 +32,7 @@
       "@semantic-release/release-notes-generator",
       "gradle-semantic-release-plugin",
       [
+        "@semantic-release/github",
         {
           "assets": [
             "build/libs/*.jar"
