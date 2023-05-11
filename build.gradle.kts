@@ -59,7 +59,4 @@ tasks {
         into(".git/hooks")
         fileMode
     }
-
-//    named("build") { dependsOn("addKtlintFormatGitPreCommitHook") }
-//    named("addKtlintFormatGitPreCommitHook") { dependsOn("compileKotlin") }
 }
