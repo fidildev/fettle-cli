@@ -3,27 +3,5 @@
   "devDependencies": {
     "gradle-semantic-release-plugin": "1.7.6",
     "semantic-release": "^20.0.0"
-  },
-  "release": {
-    "tagFormat": "${version}",
-    "branches": [
-      {
-        "name": "main",
-        "name": "83"
-      }
-    ],
-    "plugins": [
-      "gradle-semantic-release-plugin",
-      [
-        {
-          "assets": [
-            "build/libs/*.jar"
-          ]
-        }
-      ]
-    ]
-  },
-  "engines": {
-    "node": "^18.0.0"
   }
 }

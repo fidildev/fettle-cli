@@ -39,5 +39,12 @@ release-notes-generator:
     issuePrefixes:
       - "#"
 
+gradle-semantic-release-plugin:
+  assets: [
+    "build/libs/*.jar"
+  ]
+
+
+
 # Publish a new release to GitHub
 github:
