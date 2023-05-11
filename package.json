@@ -2,6 +2,42 @@
   "name": "fettle",
   "devDependencies": {
     "gradle-semantic-release-plugin": "1.7.6",
-    "semantic-release": "^20.0.0"
+    "semantic-release": "^20.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "pinst": "^3.0.0",
+    "prettier": "^2.8.8"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.md,package.json": [
+      "prettier --write"
+    ]
+  },
+  "release": {
+    "tagFormat": "${version}",
+    "branches": [
+      {
+        "name": "main",
+        "name": "83"
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "gradle-semantic-release-plugin",
+      [
+        {
+          "assets": [
+            "build/libs/*.jar"
+          ]
+        }
+      ]
+    ]
+  },
+  "engines": {
+    "node": "^18.0.0"
   }
 }
