@@ -2,9 +2,11 @@ plugins:
   - "@semantic-release/commit-analyzer"
   - "@semantic-release/release-notes-generator"
   - "@semantic-release/github"
+  - "gradle-semantic-release-plugin"
 
 branches:
   - "main"
+  - "83"
 
 commit-analyzer:
   preset: "conventionalcommits"
