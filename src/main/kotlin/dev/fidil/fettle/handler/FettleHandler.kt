@@ -3,19 +3,10 @@ package dev.fidil.fettle.handler
 import dev.fidil.fettle.command.CommandResult
 import dev.fidil.fettle.command.FettleContext
 import dev.fidil.fettle.config.FettleFunction
-import org.reflections.Reflections
-import java.lang.reflect.Method
 
 interface FettleHandler {
 
     val context: FettleContext
-
-    object FunctionFactory {
-        fun getImplementations(): Set<Method> {
-            val reflections = Reflections("dev.fidil.fettle")
-            return reflections.getMethodsAnnotatedWith(FettleFunction::class.java)
-        }
-    }
 
     @FettleFunction(
         "Branch Protection",
