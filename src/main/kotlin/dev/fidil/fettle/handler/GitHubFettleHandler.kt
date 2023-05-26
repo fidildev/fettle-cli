@@ -108,7 +108,7 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
 
         var releasesInLast28Days = 0
         for (release in releases) {
-            if (release.published_at >= date28DaysAgo) {
+            if (!release.isDraft && !release.isPrerelease && release.published_at >= date28DaysAgo) {
                 releasesInLast28Days++
             }
         }
@@ -127,11 +127,12 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
 
         val reflections = Reflections(
             ConfigurationBuilder()
-                .setUrls(ClassLoader.getSystemClassLoader().getResource(""))
                 .setScanners(Scanners.MethodsAnnotated)
+                .forPackages("dev.fidil.fettle.handler")
         )
         val annotatedMethods = reflections.getMethodsAnnotatedWith(FettleFunction::class.java)
         println(repo)
+
         for (method in annotatedMethods) {
             val ffName = method.getDeclaredAnnotation(FettleFunction::class.java).name
             val ffFailMessage = method.getDeclaredAnnotation(FettleFunction::class.java).failMessage
@@ -171,13 +172,7 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             }
         }
 
-        return when (val percentage = count / (annotatedMethods.size) * 100) {
-            in 90.0..100.0 -> CommandResult.Score("A", percentage)
-            in 80.0..89.9 -> CommandResult.Score("B", percentage)
-            in 70.0..79.9 -> CommandResult.Score("C", percentage)
-            in 60.0..69.9 -> CommandResult.Score("D", percentage)
-            else -> CommandResult.Score("F", percentage)
-        }
+        return calculateScore(count, annotatedMethods.size)
     }
 
     override fun orgScore(org: String): CommandResult {
@@ -188,12 +183,16 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
             orgScore += score.percentage
         }
 
-        return when (orgScore / repositories.size) {
-            in 90.0..100.0 -> CommandResult.OrgScore("A")
-            in 80.0..89.9 -> CommandResult.OrgScore("B")
-            in 70.0..79.9 -> CommandResult.OrgScore("C")
-            in 60.0..69.9 -> CommandResult.OrgScore("D")
-            else -> CommandResult.OrgScore("F")
+        return calculateScore(orgScore, repositories.size)
+    }
+
+    private fun calculateScore(count: Double, size: Int): CommandResult.Score {
+        return when (val percentage = (count / size) * 100) {
+            in 90.0..100.0 -> CommandResult.Score("A", percentage)
+            in 80.0..89.9 -> CommandResult.Score("B", percentage)
+            in 70.0..79.9 -> CommandResult.Score("C", percentage)
+            in 60.0..69.9 -> CommandResult.Score("D", percentage)
+            else -> CommandResult.Score("F", percentage)
         }
     }
 }
