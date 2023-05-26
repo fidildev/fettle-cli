@@ -108,6 +108,9 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
 
         var releasesInLast28Days = 0
         for (release in releases) {
+            if (release.isDraft) {
+                continue
+            }
             if (release.published_at >= date28DaysAgo) {
                 releasesInLast28Days++
             }
@@ -132,6 +135,7 @@ class GitHubFettleHandler(override val context: FettleContext) : FettleHandler {
         )
         val annotatedMethods = reflections.getMethodsAnnotatedWith(FettleFunction::class.java)
         println(repo)
+        println("Number of Fettle Functions: ${annotatedMethods.size}")
         for (method in annotatedMethods) {
             val ffName = method.getDeclaredAnnotation(FettleFunction::class.java).name
             val ffFailMessage = method.getDeclaredAnnotation(FettleFunction::class.java).failMessage
