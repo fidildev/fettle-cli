@@ -16,7 +16,7 @@
 
 ## What is Fettle?
 
-An opinionated tool created by FIDIL to quickly asses the health of a software team.
+An opinionated tool created by FIDIL to quickly assess the health of a software team.
 
 ## Fettle Functions
 
@@ -26,8 +26,11 @@ A specific check, inspired by fitness functions.
 |------------------------------------------------------|----------------------------------------------|
 | [Branch Protection](#branch-protection-enabled)      | Validates branch protection is enabled       |
 | [Code Coverage](#code-coverage-exists)               | Validates code coverage is calculated        |
+| [Default Branch Name](#default-branch-name)          | Checks for acceptable default branch name    | 
 | [Dependabot Configured](#dependabot-configured)      | Validates Dependabot is configured           |
+| [Deployment Frequency](#deployment-frequency)        | Checks the deployment frequency              |
 | [Deployment Pipelines](#deployment-pipelines-exist)  | Validates the repo uses deployment pipelines |
+| [Readme Command](#readme-exists)                     | Validates a Readme exists                    |
 | [Static Code Analysis](#static-code-analysis-active) | Validates static code analysis exists        |
 
 ## Contributing
@@ -91,8 +94,16 @@ each.
 For example, at the time of writing this is the Fettle Grade for `fettle`:
 
 ```shell
-$ ./fettle score -o fidildev -r fettle
-Fettle Score: F
+./fettle score -o fidildev -r fettle
+⚠️ Deployment Frequency: Grade C - Elite performing teams deploy multiple times a day
+✅ Dependabot
+✅ Branch Protection
+✅ Deployment Pipelines
+❌ Static Analysis: Add Codacy integration to your repo for Static Code Analysis.
+✅ Default Branch Name
+✅ Readme
+❌ Code Coverage: Add jacoco to your repo to measure code coverage.
+Fettle Score: C (72%)
 ╭ᥥ╮(´• ᴗ •`˵)╭ᥥ╮
 ```
 
@@ -110,34 +121,16 @@ Fettle Score: F
 ./fettle codeCoverage -o fidildev -r fettle
 ```
 
-#### Dependabot Configured
-
-```shell
-./fettle dependabot -o fidildev -r fettle
-```
-
-#### Deployment Pipelines Exist
-
-```shell
-./fettle checkForDeployments -o fidildev -r fettle
-```
-
-#### Static Code Analysis Active
-
-```shell
-./fettle staticCodeAnalysis -o fidildev -r fettle
-```
-
-#### Readme Exists
-
-```shell
-./fettle readme -o fidildev -r fettle
-```
-
 #### Default Branch Name
 
 ```shell
 ./fettle defaultBranchName -o fidildev -r fettle
+```
+
+#### Dependabot Configured
+
+```shell
+./fettle dependabot -o fidildev -r fettle
 ```
 
 #### Deployment Frequency
@@ -146,6 +139,23 @@ Fettle Score: F
 ./fettle deploymentFrequency -o fidildev -r fettle
 ```
 
+#### Deployment Pipelines Exist
+
+```shell
+./fettle checkForDeployments -o fidildev -r fettle
+```
+
+#### Readme Exists
+
+```shell
+./fettle readme -o fidildev -r fettle
+```
+
+#### Static Code Analysis Active
+
+```shell
+./fettle staticCodeAnalysis -o fidildev -r fettle
+```
 
 ## Star Count
 
