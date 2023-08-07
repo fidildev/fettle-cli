@@ -15,7 +15,7 @@ repositories {
 dependencies {
     implementation("org.kohsuke:github-api:1.314")
     implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3.5")
-    implementation("org.yaml:snakeyaml:2.0")
+    implementation("org.yaml:snakeyaml:2.1")
     // https://mvnrepository.com/artifact/org.reflections/reflections
     implementation("org.reflections:reflections:0.10.2") {
         exclude("org.slf4j")
