@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.8.21"
-    id("org.jlleitschuh.gradle.ktlint") version "11.5.1"
+    id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
     application
 }
 
