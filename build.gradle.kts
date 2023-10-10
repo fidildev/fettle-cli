@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.8.21"
-    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
+    id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
     application
 }
 
@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.kohsuke:github-api:1.314")
+    implementation("org.kohsuke:github-api:1.316")
     implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3.5")
     implementation("org.yaml:snakeyaml:2.2")
     // https://mvnrepository.com/artifact/org.reflections/reflections
@@ -21,7 +21,7 @@ dependencies {
         exclude("org.slf4j")
     }
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    implementation("org.slf4j:slf4j-simple:2.0.7")
+    implementation("org.slf4j:slf4j-simple:2.0.9")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
