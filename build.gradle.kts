@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.kohsuke:github-api:1.317")
+    implementation("org.kohsuke:github-api:1.318")
     implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3.5")
     implementation("org.yaml:snakeyaml:2.2")
     // https://mvnrepository.com/artifact/org.reflections/reflections
