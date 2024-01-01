@@ -21,7 +21,7 @@ dependencies {
         exclude("org.slf4j")
     }
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    implementation("org.slf4j:slf4j-simple:2.0.9")
+    implementation("org.slf4j:slf4j-simple:2.0.10")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
